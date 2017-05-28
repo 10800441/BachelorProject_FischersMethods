@@ -31,7 +31,7 @@ public class JavaFX extends Application {
         stage.setTitle("Cost distribution graph");
         //final LogarithmicNumberAxis yAxis = new LogarithmicNumberAxis(1,100 );
       // final LogarithmicNumberAxis xAxis = new LogarithmicNumberAxis(1,100 );
-        final NumberAxis xAxis = new NumberAxis(0,20, 5);
+        final NumberAxis xAxis = new NumberAxis(0,600, 50);
         final NumberAxis yAxis = new NumberAxis(0,100, 20);
 //        final ScatterChart<Number,Number> sc = new
 //                ScatterChart<Number,Number>(xAxis,yAxis);
@@ -49,7 +49,7 @@ public class JavaFX extends Application {
 
         final LineChart<Number,Number> lc = new
                 LineChart<Number,Number>(xAxis,yAxis);
-        lc.setTitle("Reduction, Branch and Bound, 12 cities");
+        lc.setTitle("Reduction, Branch and Bound, 20 cities");
 
          XYChart.Series<Number, Number> series1Average = new XYChart.Series<>();
         XYChart.Series<Number, Number> series2Average = new XYChart.Series<>();

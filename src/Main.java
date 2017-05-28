@@ -12,7 +12,7 @@ import java.util.Comparator;
  * Created by marty_000 on 22-5-2017.
  */
 public class Main {
-    final static int TOTALCITIES = 12;
+    final static int TOTALCITIES = 20;
     final static int XY_DISTANCE = 12;
     final static ArrayList<City> emptyGrid = makeCityList.makePerfectCityList(TOTALCITIES, XY_DISTANCE);
 
