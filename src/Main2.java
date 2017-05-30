@@ -1,24 +1,16 @@
-import com.sun.org.apache.regexp.internal.RE;
-
-import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.SynchronousQueue;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
 
-// StringLengthComparator.java
-import java.util.Comparator;
-/**
- * Created by marty_000 on 22-5-2017.
- */
-public class Main {
+public class Main2 {
 
-    final static String operator = "Shake";
+    final static String operator = "Reduce";
     final static String fileId = "";
-    final static int TOTALCITIES = 30;
+    final static int TOTALCITIES =20;
     final static int XY_DISTANCE = 12;
     final static ArrayList<City> emptyGrid = makeCityList.makePerfectCityList(TOTALCITIES, XY_DISTANCE);
 
@@ -58,85 +50,89 @@ public class Main {
 //            matrixArray.add(S_BB (shake, 100));
 //        }
 
-        for (int shake : shaked) {
-            System.out.println("shake: " + shake);
-            matrixArray.add(S_BB (shake, 100));
-        }
-
-
-
-//      // Reduction
-//        for (int preserve : preservation) {
-//            int count = 0;
-//
-//            System.out.println("PRESERVE: " + preserve);
-//            while (count < 100) {
-//                ArrayList<City> reducedGrid = makeCityList.reduce(emptyGrid, preserve);
-//                CPU_SCORE CPU_BB_R = BranchBound.main(reducedGrid);
-//
-//                reductionResult.add(new Result(0, preserve, CPU_BB_R.time, CPU_BB_R.score));
-//                CPU_SCORE CPU_SA_R = SA.SA(reducedGrid, CPU_BB_R.score,  600);
-//                reductionResult.add(new Result(1, preserve, CPU_SA_R.time, CPU_SA_R.score));
-//                CPU_SCORE CPU_GA_R = TSP_GA.TSP_GA(reducedGrid, CPU_BB_R.score,  600);
-//                reductionResult.add(new Result(2, preserve, CPU_GA_R.time, CPU_GA_R.score));
-//                count ++;
-//
-//            }
-//
+//        for (int shake : shaked) {
+//            System.out.println("shake: " + shake);
+//            matrixArray.add(S_BB (shake, 100));
 //        }
-//System.out.println("just aboiut halfway trough");
-
-        // Shake
 
 
-//        for (int shake: shaked) {
-//            int count = 0;
-//            System.out.println("SHAKE: " + shake + "\n");
-//            while (count < 2) {
-//                ArrayList<City> shakeGrid = makeCityList.shake(emptyGrid, XY_DISTANCE, shake);
-//
-//                CPU_SCORE CPU_BB_S = BranchBound.main(shakeGrid);
-//                reductionResult.add(new Result(1, shake, CPU_BB_S.time, CPU_BB_S.score));
-//
-//                CPU_SCORE CPU_GA_S = TSP_GA.TSP_GA(shakeGrid, CPU_BB_S.score, 600);
-//                reductionResult.add(new Result(2, shake, CPU_GA_S.time, CPU_GA_S.score));
-//                CPU_SCORE CPU_SA_S = SA.SA(shakeGrid, CPU_BB_S.score, 600);
-//                reductionResult.add(new Result(3, shake, CPU_SA_S.time, CPU_SA_S.score));
-//
-//
-//                count++;
-//            }
-////        }
-//
-//        final int repeatsPerClass = 10;
-//
-//
-//
-//
-//            int count = 10;
-//            while (count < 20) {
-//                System.out.println("\n "+ count+"\n");
-//                for(int t = 0; t < repeatsPerClass; t ++) {
-//                    emptyGrid = makeCityList.makePerfectCityList(count, XY_DISTANCE);
-//
-//                    CPU_SCORE CPU_BB_S = BranchBound.main(emptyGrid);
-//                    reductionResult.add(new Result(1, count, CPU_BB_S.time, count));
-//
-//                    CPU_SCORE CPU_GA_S = TSP_GA.TSP_GA(emptyGrid, CPU_BB_S.score, 6000);
-//                    reductionResult.add(new Result(2, count, CPU_GA_S.time, count));
-//                    CPU_SCORE CPU_SA_S = SA.SA(emptyGrid, CPU_BB_S.score, 6000);
-//                    reductionResult.add(new Result(3, count, CPU_SA_S.time, count));
-//                }
-//
-//                count= count+10;
-//            }
-//
+        ArrayList<Perform> performancearray= new ArrayList<>();
+      // Reduction
+//        for (int preserve : preservation) {
+
+
+           for (int size = 5; size < 25; size+=2){
+            int count = 1;
+
+//            double avgBB_R_Time = 0.0;
+//            double avgGA_R_Time = 0.0;
+//            double avgSA_R_Time = 0.0;
+            double avgBBTime = 0.0;
+            double avgGATime = 0.0;
+            double avgSATime = 0.0;
+
+
+//            System.out.println("PRESERVE: " + preserve);
+            while (count <= 100) {
+                System.out.println("C: " + count);
+               // ArrayList<City> reducedGrid = makeCityList.reduce(emptyGrid, preserve);
+                ArrayList<City> perfectGrid = makeCityList.makePerfectCityList(size, XY_DISTANCE);
+
+//                CPU_SCORE CPU_BB_R = BranchBound.main(reducedGrid);
+//                avgBB_R_Time += CPU_BB_R.time;
+//                CPU_SCORE CPU_SA_R = SA.SA(reducedGrid, CPU_BB_R.score, 10000);
+//                avgSA_R_Time += CPU_SA_R.time;
+//                CPU_SCORE CPU_GA_R = TSP_GA.TSP_GA(reducedGrid, CPU_BB_R.score, 10000);
+//                avgGA_R_Time += CPU_GA_R.time;
+
+
+                CPU_SCORE CPU_BB = BranchBound.main(perfectGrid);
+                avgBBTime += CPU_BB.time;
+                CPU_SCORE CPU_SA = SA.SA(perfectGrid, CPU_BB.score, 10000);
+                avgSATime += CPU_SA.time;
+                CPU_SCORE CPU_GA = TSP_GA.TSP_GA(perfectGrid, CPU_BB.score, 10000);
+                avgGATime += CPU_GA.time;
+
+                count++;
+
+            }
+//            performancearray.add(new Perform("avgBB_R_Time",preserve, avgBB_R_Time/100)) ;
+//            performancearray.add(new Perform("avgGA_R_Time", preserve , avgGA_R_Time/100)) ;
+//            performancearray.add(new Perform("avgSA_R_Time", preserve , avgSA_R_Time/100)) ;
+            performancearray.add(new Perform("avgBBTime", size,avgBBTime/100)) ;
+            performancearray.add(new Perform("avgGATime", size, avgGATime/100)) ;
+            performancearray.add(new Perform("avgSATime", size, avgSATime/100)) ;
+
+
+
+                }
+
+        File file = new File("out/data/performanceTest.txt");
+
+        try {// creates the file
+            file.createNewFile();
+
+            // creates a FileWriter Object
+            FileWriter writer = new FileWriter(file);
+
+            // Writes the content to the file
+            for(int f= 0 ; f <  performancearray.size(); f++){
+
+                writer.write(performancearray.get(f).id+","+performancearray.get(f).preservation+","+performancearray.get(f).avgTime+"\n");
+            }
+
+            writer.flush();
+            writer.close();
+        } catch(IOException ex){
+            System.out.print(ex);
+
+        }
 
         System.out.println("visualising");
 
-        JavaFX.main(preservation, matrixArray,""+ TOTALCITIES, operator);
+            JavaFX2.main(performancearray,""+ TOTALCITIES, operator);
 
-        }
+    }
 
     public static ArrayList<Result> R_BB (int preserve, int iterations ) {
         ArrayList<Result> res = new ArrayList<>();

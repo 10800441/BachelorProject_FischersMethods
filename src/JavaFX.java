@@ -21,6 +21,8 @@ public class JavaFX extends Application {
     private static ArrayList<Integer> visulatiseList = new ArrayList<>();
 
     private static ArrayList<ArrayList<Result>> mArray = new ArrayList<>();
+    private static String cities = "";
+    private static  String op = "";
 
 
 
@@ -30,28 +32,21 @@ public class JavaFX extends Application {
 
         stage.setTitle("Cost distribution graph");
         //final LogarithmicNumberAxis yAxis = new LogarithmicNumberAxis(1,100 );
-      // final LogarithmicNumberAxis xAxis = new LogarithmicNumberAxis(1,100 );
-        final NumberAxis xAxis = new NumberAxis(0,600, 50);
+      // final LogarithmicNumberAxis xAxis = new LogarithmicNumberAxis(1,100   );
+       final NumberAxis xAxis = new NumberAxis(0, 500, 20);
         final NumberAxis yAxis = new NumberAxis(0,100, 20);
 //        final ScatterChart<Number,Number> sc = new
 //                ScatterChart<Number,Number>(xAxis,yAxis);
-        xAxis.setLabel("Time (ms)");
+        xAxis.setLabel("Score ");
         yAxis.setLabel("Solved instances");
        // sc.setTitle("Reduction Operator on Branch and Bound");
 
 
-//        XYChart.Series series1 = new XYChart.Series();
-//        XYChart.Series series2 = new XYChart.Series();
-//        XYChart.Series series3 = new XYChart.Series();
-//        series1.setName("Branch and Bound");
-//        series2.setName("Generic Algorithm");
-//        series3.setName("Simulated Annealing");
-
         final LineChart<Number,Number> lc = new
                 LineChart<Number,Number>(xAxis,yAxis);
-        lc.setTitle("Reduction, Branch and Bound, 20 cities");
+        lc.setTitle(op + " Branch and Bound, " + cities + " cities");
 
-         XYChart.Series<Number, Number> series1Average = new XYChart.Series<>();
+        XYChart.Series<Number, Number> series1Average = new XYChart.Series<>();
         XYChart.Series<Number, Number> series2Average = new XYChart.Series<>();
         XYChart.Series<Number, Number> series3Average = new XYChart.Series<>();
         XYChart.Series<Number, Number> series4Average = new XYChart.Series<>();
@@ -59,74 +54,67 @@ public class JavaFX extends Application {
         XYChart.Series<Number, Number> series6Average = new XYChart.Series<>();
         XYChart.Series<Number, Number> series7Average = new XYChart.Series<>();
         XYChart.Series<Number, Number> series8Average = new XYChart.Series<>();
-//        XYChart.Series<Number,Number> series1Average = new XYChart.Series<Number,Number>();
-//        XYChart.Series<Number,Number> series2Average = new XYChart.Series<Number,Number>();
-//        XYChart.Series<Number,Number> series3Average = new XYChart.Series<Number,Number>();
-//        XYChart.Series<Number,Number> series4Average = new XYChart.Series<Number,Number>();
-//        XYChart.Series<Number,Number> series5Average = new XYChart.Series<Number,Number>();
-//        XYChart.Series<Number,Number> series6Average = new XYChart.Series<Number,Number>();
-//        XYChart.Series<Number,Number> series7Average = new XYChart.Series<Number,Number>();
-//        XYChart.Series<Number,Number> series8Average = new XYChart.Series<Number,Number>();
-        series1Average.setName("99");
-        series2Average.setName("98");
-        series3Average.setName("95");
-        series4Average.setName("90");
-        series5Average.setName("85");
-        series6Average.setName("75");
-        series7Average.setName("50");
-        series8Average.setName("25");
+        series1Average.setName("5");
+        series2Average.setName("10");
+        series3Average.setName("25");
+        series4Average.setName("50");
+        series5Average.setName("75");
+        series6Average.setName("100");
+        series7Average.setName("150");
+        series8Average.setName("200");
 
 
         for(int a = 0; a < visulatiseList.size(); a++) {
 
-            if (visulatiseList.get(a)  == 99) {
+            if (visulatiseList.get(a)  == 5) {
                 for(Result r: mArray.get(a)) {
-                    series1Average.getData().add(new XYChart.Data<Number,Number>(r.time,r.id ));
+                    series1Average.getData().add(new XYChart.Data<Number,Number>(r.score,r.id ));
+
 
                 }
 
             }
-            else if (visulatiseList.get(a)  == 98) {
+            else if (visulatiseList.get(a)  == 10) {
                 for(Result r: mArray.get(a)) {
-                    series2Average.getData().add(new XYChart.Data<Number,Number>(r.time,r.id ));
-                }
-
-            }
-            else if (visulatiseList.get(a)  == 95) {
-                for(Result r: mArray.get(a)) {
-                    series3Average.getData().add(new XYChart.Data<Number,Number>(r.time,r.id ));
-                }
-
-            }
-            else if (visulatiseList.get(a)  == 90) {
-                for(Result r: mArray.get(a)) {
-                    series4Average.getData().add(new XYChart.Data<Number,Number>(r.time,r.id));
-                    System.out.println(r.id);
-                }
-
-            }
-            else if (visulatiseList.get(a)  == 85) {
-                for(Result r: mArray.get(a)) {
-                    series5Average.getData().add(new XYChart.Data<Number,Number>(r.time,r.id ));
-                }
-
-            }
-            else if (visulatiseList.get(a)  == 75) {
-                for(Result r: mArray.get(a)) {
-
-                    series6Average.getData().add(new XYChart.Data<Number,Number>(r.time,r.id ));
-                }
-
-            }
-            else if (visulatiseList.get(a)  == 50) {
-                for(Result r: mArray.get(a)) {
-                    series7Average.getData().add(new XYChart.Data<Number,Number>(r.time,r.id ));
+                    series2Average.getData().add(new XYChart.Data<Number,Number>(r.score,r.id ));
                 }
 
             }
             else if (visulatiseList.get(a)  == 25) {
                 for(Result r: mArray.get(a)) {
-                    series8Average.getData().add(new XYChart.Data<Number,Number>(r.time,r.id ));
+                    series3Average.getData().add(new XYChart.Data<Number,Number>(r.score,r.id ));
+                }
+
+            }
+            else if (visulatiseList.get(a)  == 50) {
+                for(Result r: mArray.get(a)) {
+                    series4Average.getData().add(new XYChart.Data<Number,Number>(r.score,r.id));
+                    System.out.println(r.id);
+                }
+
+            }
+            else if (visulatiseList.get(a)  == 75) {
+                for(Result r: mArray.get(a)) {
+                    series5Average.getData().add(new XYChart.Data<Number,Number>(r.score,r.id ));
+                }
+
+            }
+            else if (visulatiseList.get(a)  == 100) {
+                for(Result r: mArray.get(a)) {
+
+                    series6Average.getData().add(new XYChart.Data<Number,Number>(r.score,r.id ));
+                }
+
+            }
+            else if (visulatiseList.get(a)  == 150) {
+                for(Result r: mArray.get(a)) {
+                    series7Average.getData().add(new XYChart.Data<Number,Number>(r.score,r.id ));
+                }
+
+            }
+            else if (visulatiseList.get(a)  == 200) {
+                for(Result r: mArray.get(a)) {
+                    series8Average.getData().add(new XYChart.Data<Number,Number>(r.score,r.id ));
                 }
 
             }
@@ -152,7 +140,7 @@ public class JavaFX extends Application {
 
 
         vbox.getChildren().addAll(lc, hbox);
-        hbox.setPadding(new Insets(10, 10, 10, 50));
+        hbox.setPadding(new Insets(30, 30, 30, 50));
 
         ((Group)scene.getRoot()).getChildren().add(vbox);
         stage.setScene(scene);
@@ -174,7 +162,9 @@ public class JavaFX extends Application {
 //            sc.getData().add(series);
 //        });
     }
-    public static void main(ArrayList<Integer> preserveList,ArrayList<ArrayList<Result>> matrixArray) {
+    public static void main(ArrayList<Integer> preserveList,ArrayList<ArrayList<Result>> matrixArray, String TOTALCITIES, String operator) {
+        cities = TOTALCITIES;
+        op = operator;
         visulatiseList = preserveList;
         mArray = matrixArray;
         launch();
