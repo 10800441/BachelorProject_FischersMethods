@@ -12,7 +12,8 @@ public class Perform {
 
 
         public Perform(String id, int preservation, double avgTime) {
- this.id = id;
+
+            this.id = id;
             this.preservation = preservation;
             this.avgTime = avgTime;
 

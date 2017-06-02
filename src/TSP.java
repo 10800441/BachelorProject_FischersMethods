@@ -1,4 +1,5 @@
 // TSP Branch and Bound Main Driver
+import javax.swing.*;
 import java.util.*;
 import java.io.*;
 public class TSP implements Serializable
@@ -46,7 +47,10 @@ public class TSP implements Serializable
             //System.out.println("next.lowerBound="+next.lowerBound());
             if (next.size() == TSP.numRows - 1 && next.lowerBound() < bestTour) {
                 bestTour = next.lowerBound();
+
                 bestNode = next;
+
+
                 if (verbose==1) {
                     System.out.println("\nNodes generated: "
                             +totalNodeCount);

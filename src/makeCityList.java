@@ -25,6 +25,25 @@ public class makeCityList {
         return cityDatabase;
     }
 
+
+    public static ArrayList<City> randomGrid(int size, int bound){
+        ArrayList<City> rand = new ArrayList<>();
+        Random rd = new Random();
+        for(int f = 0; f < size; f++){
+            int x = rd.nextInt(bound);
+            int y = rd.nextInt(bound);
+            City c = new City(x,y);
+            while(rand.contains(c)){
+                c.x =  rd.nextInt(bound);
+                c.y =  rd.nextInt(bound);
+            }
+            rand.add(c);
+
+        }
+        return rand;
+    }
+
+
     // Distributes an amount of cities evenly in rows and columns
     public static int[] calculate_grid_size(int totalCities) {
         double root_num = Math.sqrt(totalCities);

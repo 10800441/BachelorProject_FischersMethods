@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -60,8 +61,7 @@ public class Main2 {
       // Reduction
 //        for (int preserve : preservation) {
 
-
-           for (int size = 5; size < 25; size+=2){
+        for (int size = 4; size < 20; size++){
             int count = 1;
 
 //            double avgBB_R_Time = 0.0;
@@ -69,14 +69,13 @@ public class Main2 {
 //            double avgSA_R_Time = 0.0;
             double avgBBTime = 0.0;
             double avgGATime = 0.0;
-            double avgSATime = 0.0;
 
 
 //            System.out.println("PRESERVE: " + preserve);
             while (count <= 100) {
                 System.out.println("C: " + count);
-               // ArrayList<City> reducedGrid = makeCityList.reduce(emptyGrid, preserve);
-                ArrayList<City> perfectGrid = makeCityList.makePerfectCityList(size, XY_DISTANCE);
+                // ArrayList<City> reducedGrid = makeCityList.reduce(emptyGrid, preserve);
+                ArrayList<City> randomGrid = makeCityList.randomGrid(size, 1000);
 
 //                CPU_SCORE CPU_BB_R = BranchBound.main(reducedGrid);
 //                avgBB_R_Time += CPU_BB_R.time;
@@ -86,28 +85,32 @@ public class Main2 {
 //                avgGA_R_Time += CPU_GA_R.time;
 
 
-                CPU_SCORE CPU_BB = BranchBound.main(perfectGrid);
+                CPU_SCORE CPU_BB = BranchBound.main(randomGrid);
                 avgBBTime += CPU_BB.time;
-                CPU_SCORE CPU_SA = SA.SA(perfectGrid, CPU_BB.score, 10000);
-                avgSATime += CPU_SA.time;
-                CPU_SCORE CPU_GA = TSP_GA.TSP_GA(perfectGrid, CPU_BB.score, 10000);
+                System.out.println( size+ " < size BB time >  " +CPU_BB.time);
+
+                CPU_SCORE CPU_GA = TSP_GA.TSP_GA(randomGrid, CPU_BB.score, 100000);
                 avgGATime += CPU_GA.time;
+                System.out.println( size+ " < size GA time >  " +CPU_GA.time);
 
                 count++;
 
             }
+
 //            performancearray.add(new Perform("avgBB_R_Time",preserve, avgBB_R_Time/100)) ;
 //            performancearray.add(new Perform("avgGA_R_Time", preserve , avgGA_R_Time/100)) ;
 //            performancearray.add(new Perform("avgSA_R_Time", preserve , avgSA_R_Time/100)) ;
             performancearray.add(new Perform("avgBBTime", size,avgBBTime/100)) ;
             performancearray.add(new Perform("avgGATime", size, avgGATime/100)) ;
-            performancearray.add(new Perform("avgSATime", size, avgSATime/100)) ;
+          //  performancearray.add(new Perform("avgSATime", size, avgSATime/100)) ;
 
 
 
-                }
+        }
 
-        File file = new File("out/data/performanceTest.txt");
+
+
+        File file = new File("out/data/performanceTestRandom20.txt");
 
         try {// creates the file
             file.createNewFile();
@@ -116,9 +119,10 @@ public class Main2 {
             FileWriter writer = new FileWriter(file);
 
             // Writes the content to the file
-            for(int f= 0 ; f <  performancearray.size(); f++){
 
-                writer.write(performancearray.get(f).id+","+performancearray.get(f).preservation+","+performancearray.get(f).avgTime+"\n");
+            for(Perform p : performancearray) {
+                writer.write(p.id + "," + p.preservation + "," + p.avgTime+"\n");
+
             }
 
             writer.flush();
@@ -130,118 +134,10 @@ public class Main2 {
 
         System.out.println("visualising");
 
-            JavaFX2.main(performancearray,""+ TOTALCITIES, operator);
+        JavaFX2.main(performancearray,""+ TOTALCITIES, operator);
 
     }
 
-    public static ArrayList<Result> R_BB (int preserve, int iterations ) {
-        ArrayList<Result> res = new ArrayList<>();
-        String  fileName = "out/data/"+operator + "_"+TOTALCITIES+"_"+preserve+ fileId+ ".txt";
-
-        for (int y = 0; y < iterations; y++) {
-
-            ArrayList<City> reducedGrid = makeCityList.reduce(emptyGrid, preserve);
-            CPU_SCORE CPU_BB_R = BranchBound.main(reducedGrid);
-            System.out.println("30 " + CPU_BB_R.time);
-
-
-            res.add(new Result(y, preserve, CPU_BB_R.time, CPU_BB_R.score));
-        }
-
-
-
-
-        Collections.sort(res , new Comparator<Result>() {
-
-            @Override
-            public int compare(Result z1, Result z2) {
-                if (z1.time > z2.time)
-                    return 1;
-                if (z1.time < z2.time)
-                    return -1;
-                return 0;
-            }
-        });
-        File file = new File(fileName);
-
-        try {// creates the file
-            file.createNewFile();
-
-            // creates a FileWriter Object
-            FileWriter writer = new FileWriter(file);
-
-            // Writes the content to the file
-            for(int f= 1 ; f <= res.size(); f++){
-                res.get(f-1).id = f;
-                writer.write(res.get(f-1).id+","+res.get(f-1).preservation+","+res.get(f-1).time+","+res.get(f-1).score+"\n");
-            }
-
-            writer.flush();
-            writer.close();
-        } catch(IOException ex){
-            System.out.print(ex);
-
-        }
-
-
-        return res;
-
-    }
-
-    public static ArrayList<Result> S_BB (int shake, int iterations ) {
-        ArrayList<Result> res = new ArrayList<>();
-        for (int y = 0; y < iterations; y++) {
-
-            ArrayList<City> shakeGrid = makeCityList.shake(emptyGrid, XY_DISTANCE, shake);
-
-
-            CPU_SCORE CPU_BB_S = BranchBound.main(shakeGrid);
-            System.out.println(CPU_BB_S.time);
-            res.add(new Result(y,shake, CPU_BB_S.time, CPU_BB_S.score));
-        }
-
-
-        Collections.sort(res , new Comparator<Result>() {
-
-            @Override
-            public int compare(Result z1, Result z2) {
-                if (z1.time > z2.time)
-                    return 1;
-                if (z1.time < z2.time)
-                    return -1;
-                return 0;
-            }
-        });
-
-
-        for(int f= 1 ; f <= res.size(); f++){
-            res.get(f-1).id = f;
-        }
-        String  fileName = "out/data/"+operator + "_"+TOTALCITIES+"_"+shake+ fileId+ ".txt";
-        File file = new File(fileName);
-
-        try {// creates the file
-            file.createNewFile();
-
-            // creates a FileWriter Object
-            FileWriter writer = new FileWriter(file);
-
-            // Writes the content to the file
-            for(int f= 1 ; f <= res.size(); f++){
-                res.get(f-1).id = f;
-                writer.write(res.get(f-1).id+","+res.get(f-1).preservation+","+res.get(f-1).time+","+res.get(f-1).score+"\n");
-            }
-
-            writer.flush();
-            writer.close();
-        } catch(IOException ex){
-            System.out.print(ex);
-
-        }
-
-        return res;
-
-    }
 }
 
 
