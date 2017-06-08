@@ -41,7 +41,7 @@ public class DrawGraph extends JPanel {
         for (City city: tour){
             int x1 = (int) (city.x * xScale + padding + labelPadding);
             int y1 = (int) (city.y * yScale + padding);
-            graphPoints.add(new Point(x1, y1));
+          //  graphPoints.add(new Point(x1, y1));
         }
 
 

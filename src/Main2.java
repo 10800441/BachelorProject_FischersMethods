@@ -61,52 +61,52 @@ public class Main2 {
       // Reduction
 //        for (int preserve : preservation) {
 
-        for (int size = 4; size < 20; size++){
-            int count = 1;
-
-//            double avgBB_R_Time = 0.0;
-//            double avgGA_R_Time = 0.0;
-//            double avgSA_R_Time = 0.0;
-            double avgBBTime = 0.0;
-            double avgGATime = 0.0;
-
-
-//            System.out.println("PRESERVE: " + preserve);
-            while (count <= 100) {
-                System.out.println("C: " + count);
-                // ArrayList<City> reducedGrid = makeCityList.reduce(emptyGrid, preserve);
-                ArrayList<City> randomGrid = makeCityList.randomGrid(size, 1000);
-
-//                CPU_SCORE CPU_BB_R = BranchBound.main(reducedGrid);
-//                avgBB_R_Time += CPU_BB_R.time;
-//                CPU_SCORE CPU_SA_R = SA.SA(reducedGrid, CPU_BB_R.score, 10000);
-//                avgSA_R_Time += CPU_SA_R.time;
-//                CPU_SCORE CPU_GA_R = TSP_GA.TSP_GA(reducedGrid, CPU_BB_R.score, 10000);
-//                avgGA_R_Time += CPU_GA_R.time;
-
-
-                CPU_SCORE CPU_BB = BranchBound.main(randomGrid);
-                avgBBTime += CPU_BB.time;
-                System.out.println( size+ " < size BB time >  " +CPU_BB.time);
-
-                CPU_SCORE CPU_GA = TSP_GA.TSP_GA(randomGrid, CPU_BB.score, 100000);
-                avgGATime += CPU_GA.time;
-                System.out.println( size+ " < size GA time >  " +CPU_GA.time);
-
-                count++;
-
-            }
-
-//            performancearray.add(new Perform("avgBB_R_Time",preserve, avgBB_R_Time/100)) ;
-//            performancearray.add(new Perform("avgGA_R_Time", preserve , avgGA_R_Time/100)) ;
-//            performancearray.add(new Perform("avgSA_R_Time", preserve , avgSA_R_Time/100)) ;
-            performancearray.add(new Perform("avgBBTime", size,avgBBTime/100)) ;
-            performancearray.add(new Perform("avgGATime", size, avgGATime/100)) ;
-          //  performancearray.add(new Perform("avgSATime", size, avgSATime/100)) ;
-
-
-
-        }
+//        for (int size = 4; size < 20; size++){
+//            int count = 1;
+//
+////            double avgBB_R_Time = 0.0;
+////            double avgGA_R_Time = 0.0;
+////            double avgSA_R_Time = 0.0;
+//            double avgBBTime = 0.0;
+//            double avgGATime = 0.0;
+//
+//
+////            System.out.println("PRESERVE: " + preserve);
+//            while (count <= 100) {
+//                System.out.println("C: " + count);
+//                // ArrayList<City> reducedGrid = makeCityList.reduce(emptyGrid, preserve);
+//                ArrayList<City> randomGrid = makeCityList.randomGrid(size, 1000);
+//
+////                CPU_SCORE CPU_BB_R = BranchBound.main(reducedGrid);
+////                avgBB_R_Time += CPU_BB_R.time;
+////                CPU_SCORE CPU_SA_R = SA.SA(reducedGrid, CPU_BB_R.score, 10000);
+////                avgSA_R_Time += CPU_SA_R.time;
+////                CPU_SCORE CPU_GA_R = TSP_GA.TSP_GA(reducedGrid, CPU_BB_R.score, 10000);
+////                avgGA_R_Time += CPU_GA_R.time;
+//
+//
+//                CPU_SCORE CPU_BB = BranchBound.main(randomGrid);
+//                avgBBTime += CPU_BB.time;
+//                System.out.println( size+ " < size BB time >  " +CPU_BB.time);
+//
+//                CPU_SCORE CPU_GA = TSP_GA.TSP_GA(randomGrid, CPU_BB.score, 100000);
+//                avgGATime += CPU_GA.time;
+//                System.out.println( size+ " < size GA time >  " +CPU_GA.time);
+//
+//                count++;
+//
+//            }
+//
+////            performancearray.add(new Perform("avgBB_R_Time",preserve, avgBB_R_Time/100)) ;
+////            performancearray.add(new Perform("avgGA_R_Time", preserve , avgGA_R_Time/100)) ;
+////            performancearray.add(new Perform("avgSA_R_Time", preserve , avgSA_R_Time/100)) ;
+//            performancearray.add(new Perform("avgBBTime", size,avgBBTime/100)) ;
+//            performancearray.add(new Perform("avgGATime", size, avgGATime/100)) ;
+//          //  performancearray.add(new Perform("avgSATime", size, avgSATime/100)) ;
+//
+//
+//
+//        }
 
 
 

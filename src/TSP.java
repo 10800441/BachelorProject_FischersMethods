@@ -13,6 +13,7 @@ public class TSP implements Serializable
     private Node bestNode;
     private TreeSet queue = new TreeSet();
     public static Cost c;
+    public int iterations = 0;
     private long totalNodeCount = 0L;
     public TSP (double [][] costMatrix, int size, double bestTour /*, double threshold */, int verbose) {
 // this.threshold = threshold;
@@ -40,14 +41,15 @@ public class TSP implements Serializable
             if (verbose==1) System.out.println("The lower bound for root node (no constraints): "+root.lowerBound());
             queue.add(root);
         }
-
+int count = 0;
         while (queue.size() > 0) {
+            count++;
             Node next = (Node) queue.first();
             //System.out.println("next.size="+next.size());
             //System.out.println("next.lowerBound="+next.lowerBound());
             if (next.size() == TSP.numRows - 1 && next.lowerBound() < bestTour) {
                 bestTour = next.lowerBound();
-
+                iterations = count;
                 bestNode = next;
 
 

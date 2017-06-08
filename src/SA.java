@@ -81,7 +81,7 @@ public class SA {
         }
 //        JFrame frame = new JFrame("SA");
 //        makeCityList.printGrid( frame, best.getTour());
-        return new CPU_SCORE(endTime - startTime,  currentBest);
+        return null;
 
     }
 }

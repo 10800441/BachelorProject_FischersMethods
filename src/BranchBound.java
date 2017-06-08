@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class BranchBound
 {
-    public static CPU_SCORE main(ArrayList<City> grid) {
+    public static BBresult main(ArrayList<City> grid) {
         int verbose=0;
         int size = grid.size();
         //System.out.println("size="+size);
@@ -39,6 +39,6 @@ int counter = 0;
 //TSP(costMatrix,size,bestRoute,verbose)
         tsp.generateSolution(false);
         long endTime = System.currentTimeMillis();
-        return new CPU_SCORE((endTime- startTime),(int) tsp.bestTour());
+        return new BBresult(tsp.iterations, (endTime- startTime), tsp.bestTour());
     }
 }

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class TSP_GA {
 
 
-    public static CPU_SCORE TSP_GA(ArrayList<City> emptyGrid, double optimalScore, long timeBound) {
+    public static double TSP_GA(ArrayList<City> emptyGrid, double iterations, long timeBound) {
         TourManager.clearAll();
 
         for(City c:  emptyGrid){
@@ -23,10 +23,6 @@ public class TSP_GA {
         long startTime = System.currentTimeMillis();
 
 
-        double currentBest = optimalScore+10;
-        // as long as the optimum score isnt reached or a time bound
-        while((currentBest > optimalScore+1) && ((endTime - startTime) < timeBound )) {
-
             // Initialize population
             Population pop = new Population(50, true);
 
@@ -34,18 +30,17 @@ public class TSP_GA {
 
 
             pop = GA.evolvePopulation(pop);
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < iterations; i++) {
                 pop = GA.evolvePopulation(pop);
             }
             endTime = System.currentTimeMillis();
-            currentBest = (double) pop.getFittest().getDistance();
-        }
+            double currentBest = (double) pop.getFittest().getDistance();
 
-        if((endTime - startTime) >= timeBound) return new CPU_SCORE(1000, currentBest);
+        //if((endTime - startTime) >= timeBound) return new CPU_SCORE(1000, currentBest);
         // Print final results
 //     makeCityList.printGrid(new JFrame("GA"), pop.getFittest().getTour());
 
 
-        return new CPU_SCORE(endTime - startTime, currentBest);
+        return currentBest;
     }
 }
