@@ -34,13 +34,12 @@ public class TSP_GA {
                 pop = GA.evolvePopulation(pop);
             }
             endTime = System.currentTimeMillis();
-            double currentBest = (double) pop.getFittest().getDistance();
 
         //if((endTime - startTime) >= timeBound) return new CPU_SCORE(1000, currentBest);
         // Print final results
 //     makeCityList.printGrid(new JFrame("GA"), pop.getFittest().getTour());
 
 
-        return currentBest;
+        return (double) pop.getFittest().getDistance()+1;
     }
 }

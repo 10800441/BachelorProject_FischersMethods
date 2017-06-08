@@ -8,7 +8,7 @@ public class BranchBound
         int size = grid.size();
         //System.out.println("size="+size);
         double [] places=new double[size*2+1]; //x and y        coordinate
-int counter = 0;
+        int counter = 0;
         for (City c:grid) {
             counter++;
             places[counter]=Double.parseDouble(String.valueOf(c.x)); //x coordinate
@@ -36,8 +36,9 @@ int counter = 0;
         }
         //get solution
         TSP tsp = new TSP(costMatrix,size,Double.MAX_VALUE,verbose);
-//TSP(costMatrix,size,bestRoute,verbose)
+
         tsp.generateSolution(false);
+
         long endTime = System.currentTimeMillis();
         return new BBresult(tsp.iterations, (endTime- startTime), tsp.bestTour());
     }

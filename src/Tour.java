@@ -12,7 +12,7 @@ public class Tour{
     // Holds our tour of cities
     private ArrayList tour = new ArrayList<City>();
     // Cache
-    private double fitness = 0;
+    private double fitness = 0.0;
     private int distance = 0;
 
     // Returns tour information
@@ -56,8 +56,8 @@ public class Tour{
 
     // Gets the tours fitness
     public double getFitness() {
-        if (fitness == 0) {
-            fitness = 1/(double)getDistance();
+        if (fitness == 0.0) {
+            fitness = 1.0/(double)getDistance();
         }
         return fitness;
     }

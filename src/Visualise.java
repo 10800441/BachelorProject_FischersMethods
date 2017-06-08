@@ -48,7 +48,7 @@ public class Visualise extends JPanel{
 
 
                 // format:  ArrayList<City> grid, int pertrubation, int iterationsBB, long timeBB, double optScore, double scoreGA, int maxIterGA
-                resultArray.add(new CPU_SCORE(grid, Integer.valueOf(rawString[1]), Integer.valueOf(rawString[2]), Long.valueOf(rawString[3]), Double.valueOf(rawString[4]), Double.valueOf(rawString[5]), Integer.valueOf(rawString[6])));
+                resultArray.add(new CPU_SCORE(grid, Integer.valueOf(rawString[1]), Integer.valueOf(rawString[2]),Integer.valueOf(rawString[3]),Integer.valueOf(rawString[4]), Long.valueOf(rawString[5]), Double.valueOf(rawString[6]), Double.valueOf(rawString[7]), Integer.valueOf(rawString[8])));
             }
 
             fr.close();
@@ -78,7 +78,7 @@ public class Visualise extends JPanel{
 
             for (CPU_SCORE result : resultArray) {
                 statistics.add((result.scoreGA/result.optScore)*100);
-                System.out.println("value " + (result.scoreGA/result.optScore)*100);
+
                 if (!pertrubation.contains(result.pertrubation)) pertrubation.add(result.pertrubation);
                 // x axis iterationsBB
                 int x1 = (int) (result.pertrubation * xScale + padding + labelPadding);

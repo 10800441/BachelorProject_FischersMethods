@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.Random;
 
 import static java.lang.Math.round;
+import static java.lang.Math.sqrt;
+import static java.lang.StrictMath.abs;
 
 /**
  * Created by marty_000 on 22-5-2017.
@@ -25,7 +27,33 @@ public class makeCityList {
         return cityDatabase;
     }
 
+    public static double[][] calculateCostMatrix(ArrayList<City> grid) {
 
+        double[][] cm = new double[Main.TOTALCITIES][Main.TOTALCITIES];
+
+        // Loop trough all rows
+        for (int i = 0; i < Main.TOTALCITIES; i++) {
+            City fromCity = grid.get(i);
+
+            // Loop trough all columns
+            for (int j = 0; j < Main.TOTALCITIES; j++) {
+                City toCity = grid.get(j);
+
+                if (i == j) {
+                    // Negative distance to self
+                    cm[j][i] = 0.0;
+                }
+                else {
+                    //Calculate euclidean distance using pythagoras theorem
+                    double delta_x = abs(fromCity.x - toCity.x);
+                    double delta_y = abs(fromCity.y - toCity.y);
+                    cm[j][i] = sqrt(Math.pow(delta_x,2) + Math.pow(delta_y,2));
+                }
+            }
+        }
+
+        return cm;
+    }
     public static ArrayList<City> randomGrid(int size, int bound){
         ArrayList<City> rand = new ArrayList<>();
         Random rd = new Random();

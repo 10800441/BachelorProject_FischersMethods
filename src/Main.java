@@ -19,15 +19,16 @@ public class Main {
     // operators: reduction or shake
     final static String operator = "Reduction";
     final static String fileId = "1";
-    final static int TOTALCITIES = 20;
+    final static int TOTALCITIES = 12;
     final static int XY_DISTANCE = 12;
     final static boolean drawScatter = true;
     final static boolean drawMeans = true;
 
 
     final static ArrayList<City> emptyGrid = makeCityList.makePerfectCityList(TOTALCITIES, XY_DISTANCE);
-    static int repeatingExperiments = 100;
-    final static int iterationsBoundGA= 100;
+    final static double[][] cm = makeCityList.calculateCostMatrix(emptyGrid);
+    static int repeatingExperiments = 1;
+    final static int iterationsBoundGA= 10;
 
     public static void main(String[] args) {
 
@@ -52,23 +53,23 @@ public class Main {
         shaked.add(150);
         shaked.add(200);
         // Reduction
+
+
+
         // System.out.println("Saving files as" + fileName);
         String fileName = "out/data/Systematic/" + operator + "Cities"+ TOTALCITIES + "_Ex" +repeatingExperiments +"bo"+ iterationsBoundGA + ".txt";
         ArrayList<ArrayList<CPU_SCORE>> matrixArray = new ArrayList<>();
         if(operator.equals("Reduction")) {
-         matrixArray = reductionOperator(preservation);
+            matrixArray = reductionOperator(preservation);
         } else {
             matrixArray = shakeOperator(preservation);
         }
 
         System.out.println("Saving files as: " + fileName);
-
-
         saveResult(matrixArray, fileName);
-
         Visualise.main(fileName, drawMeans, drawScatter);
-
     }
+
     private static ArrayList<ArrayList<CPU_SCORE>> reductionOperator(ArrayList<Integer> preservation) {
         ArrayList<ArrayList<CPU_SCORE>> reductionResult = new ArrayList<>();
 
@@ -76,16 +77,26 @@ public class Main {
             System.out.println("Preservance level: " + preservance);
             ArrayList<CPU_SCORE> a = new ArrayList<>();
 
-
             for (int no = 0; no < repeatingExperiments; no++) {
+
+
                 ArrayList<City> reducedGrid = makeCityList.reduce(emptyGrid, preservance);
+
+                BBresult hkRes = null;
+               try{
+                   hkRes = HeldKarp.main(reducedGrid, cm);
+               } catch (IOException ex){
+                   System.out.println(ex);
+               }
+
+
                 BBresult bbRes = BranchBound.main(reducedGrid);
                 double scoreGA = TSP_GA.TSP_GA(reducedGrid, iterationsBoundGA, bbRes.timeBB);
-                if (scoreGA < bbRes.optScore-3) {
-                    System.out.print("aarg");
-                    System.out.print(scoreGA);
-                }
-                a.add(new CPU_SCORE(reducedGrid, preservance, bbRes.iterationsBB, bbRes.timeBB, bbRes.optScore, scoreGA, iterationsBoundGA));
+
+                    System.out.print(hkRes.optScore + " hk  bb " + bbRes.optScore + " GA" + scoreGA);
+
+
+                a.add(new CPU_SCORE(reducedGrid, preservance,hkRes.iterationsBB, hkRes.timeBB, bbRes.iterationsBB, bbRes.timeBB, bbRes.optScore, scoreGA, iterationsBoundGA));
             }
             reductionResult.add(a);
         }
@@ -101,17 +112,23 @@ public class Main {
             for (int no = 0; no < repeatingExperiments; no++) {
 
                 ArrayList<City> shakeGrid = makeCityList.shake(emptyGrid, XY_DISTANCE, shake);
+                BBresult hkRes = null;
+                try{
+                    hkRes = HeldKarp.main(shakeGrid, cm);
+                } catch (IOException ex){
+                    System.out.println(ex);
+                }
 
                 BBresult bbRes = BranchBound.main(shakeGrid);
                 double scoreGA = TSP_GA.TSP_GA(shakeGrid, iterationsBoundGA, bbRes.timeBB);
 
-                a.add(new CPU_SCORE(shakeGrid,  shake, bbRes.iterationsBB, bbRes.timeBB, bbRes.optScore, scoreGA, iterationsBoundGA));
+                a.add(new CPU_SCORE(shakeGrid,  shake,hkRes.iterationsBB, hkRes.timeBB, bbRes.iterationsBB, bbRes.timeBB, bbRes.optScore, scoreGA, iterationsBoundGA));
             }
             shakeResult.add(a);
         }
         return shakeResult;
     }
-    
+
     public static void sortByTime (ArrayList<CPU_SCORE> unSorted) {
         Collections.sort(unSorted , new Comparator<CPU_SCORE>() {
 
@@ -160,7 +177,7 @@ public class Main {
                         writer.write(res.grid.get(h).x+ "," + res.grid.get(h).y + "-");
                     }
                     writer.write(res.grid.get(res.grid.size()-1).x+ "," + res.grid.get(res.grid.size()-1).y);
-                    writer.write( ";"+ res.pertrubation + ";"+ res.iterationsBB+ ";"+  res.timeBB+ ";"+  res.optScore+ ";"+  res.scoreGA+ ";"+  res.maxIterGA + "\n");
+                    writer.write( ";"+ res.pertrubation + ";"+ res.iterationsHK+ ";" + res.timeHK + ";" + res.iterationsBB + ";"+  res.timeBB + ";"+  res.optScore+ ";"+  res.scoreGA+ ";"+  res.maxIterGA + "\n");
                 }
             }
 
@@ -170,9 +187,7 @@ public class Main {
             System.out.print(ex);
 
         }
-     }
-
-
+    }
 }
 
 
