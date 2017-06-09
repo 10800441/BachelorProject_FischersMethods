@@ -14,7 +14,11 @@ public class Visualise extends JPanel{
     private int padding = 25;
     private int labelPadding = 25;
     private Color lineColor = new Color(44, 102, 230, 180);
-    private Color pointColor = new Color(100, 100, 100, 180);
+    private Color pointColor = new Color(200, 200, 000, 180);
+
+    private Color point2Color = new Color(00, 100, 00, 180);
+
+    private Color point3Color = new Color(200, 00, 000, 180);
     private Color gridColor = new Color(200, 200, 200, 200);
     private static final Stroke GRAPH_STROKE = new BasicStroke(2f);
     private int pointWidth = 8;
@@ -48,7 +52,7 @@ public class Visualise extends JPanel{
 
 
                 // format:  ArrayList<City> grid, int pertrubation, int iterationsBB, long timeBB, double optScore, double scoreGA, int maxIterGA
-                resultArray.add(new CPU_SCORE(grid, Integer.valueOf(rawString[1]), Integer.valueOf(rawString[2]),Integer.valueOf(rawString[3]),Integer.valueOf(rawString[4]), Long.valueOf(rawString[5]), Double.valueOf(rawString[6]), Double.valueOf(rawString[7]), Integer.valueOf(rawString[8])));
+                resultArray.add(new CPU_SCORE(grid, Integer.valueOf(rawString[1]), Integer.valueOf(rawString[2]),Integer.valueOf(rawString[3]),Double.valueOf(rawString[4]), Integer.valueOf(rawString[5]), Long.valueOf(rawString[6]), Double.valueOf(rawString[7]), Double.valueOf(rawString[8]), Integer.valueOf(rawString[9])));
             }
 
             fr.close();
@@ -72,19 +76,27 @@ public class Visualise extends JPanel{
             double xScale = ((double) getWidth() - (2 * padding) - labelPadding) / getMaxX();
             double yScale = ((double) getHeight() - 2 * padding - labelPadding) / getMaxY();
 
-            java.util.List<Point> graphPoints = new ArrayList<>();
+            java.util.List<Point> graphBBPoints = new ArrayList<>();
+
+            java.util.List<Point> graphHKPoints = new ArrayList<>();
+
+            java.util.List<Point> graphGAPoints = new ArrayList<>();
             java.util.List<Point> graphMeanPoints = new ArrayList<>();
             ArrayList<Integer> pertrubation = new ArrayList<>();
 
             for (CPU_SCORE result : resultArray) {
-                statistics.add((result.scoreGA/result.optScore)*100);
+                statistics.add((result.scoreGA/result.optScoreBB)*100);
 
                 if (!pertrubation.contains(result.pertrubation)) pertrubation.add(result.pertrubation);
                 // x axis iterationsBB
                 int x1 = (int) (result.pertrubation * xScale + padding + labelPadding);
                 // y axis
-                int y1 =   getHeight() - (int) (((result.scoreGA/result.optScore)*100) * yScale + padding + labelPadding);
-                graphPoints.add(new Point(x1, y1,result.pertrubation,  (int) (result.scoreGA/result.optScore)*100));
+                int yBB =   getHeight() - (int) ((result.optScoreBB) * yScale + padding + labelPadding);
+                int yHK =   getHeight() - (int) ((result.optScoreHK) * yScale + padding + labelPadding);
+                int yGA =   getHeight() - (int) ((result.scoreGA) * yScale + padding + labelPadding);
+                graphBBPoints.add(new Point(x1, yBB,result.pertrubation,  (int) result.optScoreBB));
+                graphHKPoints.add(new Point(x1, yHK,result.pertrubation,  (int) result.optScoreHK));
+                graphGAPoints.add(new Point(x1, yGA,result.pertrubation,  (int) result.scoreGA));
             }
 
 
@@ -158,23 +170,44 @@ public class Visualise extends JPanel{
 //            }
 
             g2.setStroke(oldStroke);
-            g2.setColor(pointColor);
+
         if(drawScatter) {
-            for (int i = 0; i < graphPoints.size(); i++) {
-                int x = graphPoints.get(i).x - pointWidth / 2;
-                int y = graphPoints.get(i).y - pointWidth / 2;
+            //yellow
+            g2.setColor(pointColor);
+            for (int i = 0; i < graphBBPoints.size(); i++) {
+                int x = graphBBPoints.get(i).x - pointWidth / 2;
+                int y = graphBBPoints.get(i).y - pointWidth / 2;
              int ovalW = pointWidth;
              int ovalH = pointWidth;
                 g2.fillOval(x, y, ovalW, ovalH);
             }
+            //green
+            g2.setColor(point2Color);
+            for (int i = 0; i < graphHKPoints.size(); i++) {
+                int x = graphHKPoints.get(i).x - pointWidth / 2;
+                int y = graphHKPoints.get(i).y - pointWidth / 2;
+                int ovalW = pointWidth;
+                int ovalH = pointWidth;
+                g2.fillOval(x, y, ovalW, ovalH);
+            }
+            //red
+            g2.setColor(point3Color);
+            for (int i = 0; i < graphGAPoints.size(); i++) {
+                int x = graphGAPoints.get(i).x - pointWidth / 2;
+                int y = graphGAPoints.get(i).y - pointWidth / 2;
+                int ovalW = pointWidth;
+                int ovalH = pointWidth;
+                g2.fillOval(x, y, ovalW, ovalH);
+            }
 
         }
+            drawMean = false;
             if (drawMean) {
                 for(int i = 0; i < getMaxX()+1; i++) {
                     int pointi = (int) (i * xScale + padding + labelPadding);
                     int mean = -1;
 
-                    for (Point p : graphPoints) {
+                    for (Point p : graphBBPoints) {
                         if (p.realx == i) {
                            if(mean == -1) mean = 0;
                             System.out.println(p.realx);
@@ -182,7 +215,7 @@ public class Visualise extends JPanel{
                         }
                     }
                     if(mean !=-1) {
-                        int newy = getHeight() - ((int) ((mean / (graphPoints.size()/pertrubation.size()))*yScale + padding + labelPadding));
+                        int newy = getHeight() - ((int) ((mean / (graphBBPoints.size()/pertrubation.size()))*yScale + padding + labelPadding));
                         graphMeanPoints.add(new Point(pointi,newy, mean, mean));
                     }
                 }
@@ -210,7 +243,11 @@ public class Visualise extends JPanel{
     private double getMaxY() {
         int maxScore = 0;
         for (CPU_SCORE r : resultArray) {
-            if(r.timeBB > maxScore) maxScore = (int) r.timeBB ;
+            if(r.scoreGA > maxScore) maxScore = (int) r.scoreGA ;
+
+            if(r.optScoreBB > maxScore) maxScore = (int) r.optScoreBB ;
+
+            if(r.optScoreHK > maxScore) maxScore = (int) r.optScoreHK ;
         }
         return maxScore;
     }

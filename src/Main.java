@@ -27,8 +27,8 @@ public class Main {
 
     final static ArrayList<City> emptyGrid = makeCityList.makePerfectCityList(TOTALCITIES, XY_DISTANCE);
     final static double[][] cm = makeCityList.calculateCostMatrix(emptyGrid);
-    static int repeatingExperiments = 1;
-    final static int iterationsBoundGA= 10;
+    static int repeatingExperiments = 10;
+    final static int iterationsBoundGA= 20;
 
     public static void main(String[] args) {
 
@@ -57,7 +57,7 @@ public class Main {
 
 
         // System.out.println("Saving files as" + fileName);
-        String fileName = "out/data/Systematic/" + operator + "Cities"+ TOTALCITIES + "_Ex" +repeatingExperiments +"bo"+ iterationsBoundGA + ".txt";
+        String fileName = "out/data/Systematic/" + operator + "Cities"+ TOTALCITIES + "_Ex" +repeatingExperiments +"bo"+ iterationsBoundGA + "1.txt";
         ArrayList<ArrayList<CPU_SCORE>> matrixArray = new ArrayList<>();
         if(operator.equals("Reduction")) {
             matrixArray = reductionOperator(preservation);
@@ -96,7 +96,7 @@ public class Main {
                     System.out.print(hkRes.optScore + " hk  bb " + bbRes.optScore + " GA" + scoreGA);
 
 
-                a.add(new CPU_SCORE(reducedGrid, preservance,hkRes.iterationsBB, hkRes.timeBB, bbRes.iterationsBB, bbRes.timeBB, bbRes.optScore, scoreGA, iterationsBoundGA));
+                a.add(new CPU_SCORE(reducedGrid, preservance,hkRes.iterationsBB, hkRes.timeBB, hkRes.optScore,  bbRes.iterationsBB, bbRes.timeBB, bbRes.optScore, scoreGA, iterationsBoundGA));
             }
             reductionResult.add(a);
         }
@@ -112,9 +112,10 @@ public class Main {
             for (int no = 0; no < repeatingExperiments; no++) {
 
                 ArrayList<City> shakeGrid = makeCityList.shake(emptyGrid, XY_DISTANCE, shake);
+                double[][] shakenCm = makeCityList.calculateCostMatrix(shakeGrid);
                 BBresult hkRes = null;
                 try{
-                    hkRes = HeldKarp.main(shakeGrid, cm);
+                    hkRes = HeldKarp.main(shakeGrid, shakenCm);
                 } catch (IOException ex){
                     System.out.println(ex);
                 }
@@ -122,7 +123,7 @@ public class Main {
                 BBresult bbRes = BranchBound.main(shakeGrid);
                 double scoreGA = TSP_GA.TSP_GA(shakeGrid, iterationsBoundGA, bbRes.timeBB);
 
-                a.add(new CPU_SCORE(shakeGrid,  shake,hkRes.iterationsBB, hkRes.timeBB, bbRes.iterationsBB, bbRes.timeBB, bbRes.optScore, scoreGA, iterationsBoundGA));
+                a.add(new CPU_SCORE(shakeGrid,  shake,hkRes.iterationsBB, hkRes.timeBB, hkRes.optScore, bbRes.iterationsBB, bbRes.timeBB, bbRes.optScore, scoreGA, iterationsBoundGA));
             }
             shakeResult.add(a);
         }
@@ -177,7 +178,7 @@ public class Main {
                         writer.write(res.grid.get(h).x+ "," + res.grid.get(h).y + "-");
                     }
                     writer.write(res.grid.get(res.grid.size()-1).x+ "," + res.grid.get(res.grid.size()-1).y);
-                    writer.write( ";"+ res.pertrubation + ";"+ res.iterationsHK+ ";" + res.timeHK + ";" + res.iterationsBB + ";"+  res.timeBB + ";"+  res.optScore+ ";"+  res.scoreGA+ ";"+  res.maxIterGA + "\n");
+                    writer.write( ";"+ res.pertrubation + ";"+ res.iterationsHK+ ";" + res.timeHK + ";" + res.optScoreHK + ";" +res.iterationsBB + ";"+  res.timeBB + ";"+  res.optScoreBB+ ";"+  res.scoreGA+ ";"+  res.maxIterGA + "\n");
                 }
             }
 
