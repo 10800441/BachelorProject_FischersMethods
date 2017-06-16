@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class SA {
 
     // Calculate the acceptance probability
-    public static double acceptanceProbability(int energy, int newEnergy, double temperature) {
+    public static double acceptanceProbability(double energy, double newEnergy, double temperature) {
         // If the new solution is better, accept it
         if (newEnergy < energy) {
             return 1.0;
@@ -13,7 +13,7 @@ public class SA {
         return Math.exp((energy - newEnergy) / temperature);
     }
 
-    public static CPU_SCORE SA(ArrayList<City> emptyGrid, double optimalScore, long timeBound) {
+    public static double SA(ArrayList<City> emptyGrid, int bound, long timeBound) {
 
        TourManager.clearAll();
 
@@ -21,11 +21,13 @@ public class SA {
             TourManager.addCity(c);
         }
 
-        double currentBest = optimalScore+10;
+        double currentBest = 100000000;
         long endTime = System.currentTimeMillis();
         long startTime = System.currentTimeMillis();
         // as long as the optimum score isnt reached or a time bound
-        while((currentBest > optimalScore+optimalScore*0.01) && ((endTime - startTime) < timeBound )) {
+        int k = 0;
+        while(k < bound) {
+            k++;
 
             // Set initial temp
             double temp = 10000;
@@ -58,9 +60,9 @@ public class SA {
                 newSolution.setCity(tourPos2, citySwap1);
                 newSolution.setCity(tourPos1, citySwap2);
 
-                // Get energy of solutions
-                int currentEnergy = currentSolution.getDistance();
-                int neighbourEnergy = newSolution.getDistance();
+          //       Get energy of solutions
+                double currentEnergy = currentSolution.getDistance();
+                double neighbourEnergy = newSolution.getDistance();
 
                 // Decide if we should accept the neighbour
                 if (acceptanceProbability(currentEnergy, neighbourEnergy, temp) > Math.random()) {
@@ -77,11 +79,12 @@ public class SA {
             }
             currentBest = (double) best.getDistance();
 
-            endTime = System.currentTimeMillis();
+
         }
 //        JFrame frame = new JFrame("SA");
 //        makeCityList.printGrid( frame, best.getTour());
-        return null;
+
+        return currentBest;
 
     }
 }

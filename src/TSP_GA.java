@@ -40,6 +40,6 @@ public class TSP_GA {
 //     makeCityList.printGrid(new JFrame("GA"), pop.getFittest().getTour());
 
 
-        return (double) pop.getFittest().getDistance()+1;
+        return (double) pop.getFittest().getDistance();
     }
 }

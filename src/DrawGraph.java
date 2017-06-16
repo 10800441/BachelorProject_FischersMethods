@@ -16,6 +16,8 @@ import javax.swing.SwingUtilities;
 
 public class DrawGraph extends JPanel {
 
+
+
     private int width = 200;
     private int heigth = 200;
     private int padding = 25;
@@ -41,7 +43,7 @@ public class DrawGraph extends JPanel {
         for (City city: tour){
             int x1 = (int) (city.x * xScale + padding + labelPadding);
             int y1 = (int) (city.y * yScale + padding);
-          //  graphPoints.add(new Point(x1, y1));
+            graphPoints.add(new Point(x1, y1));
         }
 
 
@@ -142,10 +144,10 @@ public class DrawGraph extends JPanel {
         return maxScore+1;
     }
 
-    public static void createAndShowGui(JFrame frame, ArrayList<City> solGrid) {
+    public static void createAndShowGui(JFrame frame, ArrayList<City> solGrid, DrawGraph m) {
         tour = solGrid;
 
-        DrawGraph mainPanel = new DrawGraph();
+        DrawGraph mainPanel = m;
         mainPanel.setPreferredSize(new Dimension(200, 200));
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

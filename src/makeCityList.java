@@ -109,7 +109,7 @@ public class makeCityList {
     }
 
     public static void printGrid(JFrame frame,  ArrayList<City> tour) {
-        DrawGraph.createAndShowGui(frame, tour);
+        DrawGraph.createAndShowGui(frame, tour, new DrawGraph());
     }
 
 

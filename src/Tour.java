@@ -13,7 +13,7 @@ public class Tour{
     private ArrayList tour = new ArrayList<City>();
     // Cache
     private double fitness = 0.0;
-    private int distance = 0;
+    private double distance = 0.0;
 
     // Returns tour information
     public ArrayList getTour(){
@@ -63,9 +63,9 @@ public class Tour{
     }
 
     // Gets the total distance of the tour
-    public int getDistance(){
-        if (distance == 0) {
-            int tourDistance = 0;
+    public double getDistance(){
+        if (distance == 0.0) {
+            double tourDistance = 0.0;
             // Loop through our tour's cities
             for (int cityIndex=0; cityIndex < tourSize(); cityIndex++) {
                 // Get city we're travelling from
