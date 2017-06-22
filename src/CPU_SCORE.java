@@ -12,10 +12,11 @@ public class CPU_SCORE {
     long timeBB;
     double optScoreBB;
     double scoreGA;
+    double scoreSA;
     int maxIterGA;
 
 
-    public CPU_SCORE( ArrayList<City> grid, int pertrubation,  int iterationsBB, long timeBB, double optScoreBB, double scoreGA, int maxIterGA){
+    public CPU_SCORE( ArrayList<City> grid, int pertrubation,  int iterationsBB, long timeBB, double optScoreBB, double scoreGA,double scoreSA, int maxIterGA){
         this.grid = grid;
         this.pertrubation = pertrubation;
 
@@ -23,6 +24,7 @@ public class CPU_SCORE {
         this.timeBB = timeBB;
         this.optScoreBB = optScoreBB;
         this.scoreGA = scoreGA;
+        this.scoreSA = scoreSA;
        this.maxIterGA = maxIterGA;
 
     }

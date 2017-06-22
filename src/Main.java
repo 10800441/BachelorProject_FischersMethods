@@ -22,8 +22,8 @@ public class Main {
 
     // operators: reduction or shake
     final static String operator = "Shake";
-    final static String fileId = "ShakeC16GA";
-    final static int TOTALCITIES = 16;
+    final static String fileId = "GASAsha";
+    final static int TOTALCITIES = 20;
     final static int XY_DISTANCE = 12;
     final static boolean drawScatter = true;
     final static boolean drawMeans = true;
@@ -61,13 +61,13 @@ public class Main {
 
 
         // System.out.println("Saving files as" + fileName);
-        String fileName = "out/data/Systematic/" + operator + "Cities"+ TOTALCITIES + "_Ex" +repeatingExperiments +"bo"+ iterationsBoundGA + fileId+ ".txt";
+        String fileName = "out/data/FinalResults/" + operator + fileId+ ".txt";
         ArrayList<ArrayList<CPU_SCORE>> matrixArray = new ArrayList<>();
 
-//        if(operator.equals("Shake")) {
-//            matrixArray = reductionOperator(preservation);
-//        } else {
-            matrixArray = shakeOperator(shaked);
+
+             matrixArray = shakeOperator(shaked);
+
+          // matrixArray = reductionOperator(preservation);
 //        }
 
         System.out.println("Saving files as: " + fileName);
@@ -81,16 +81,25 @@ public class Main {
         for (int preservance : preservation) {
             System.out.println("Preservance level: " + preservance);
             ArrayList<CPU_SCORE> a = new ArrayList<>();
-
+            int c = 0;
             for (int no = 0; no < repeatingExperiments; no++) {
 
                 ArrayList<City> reducedGrid = makeCityList.reduce(emptyGrid, preservance);
 
                 BBresult bbRes = BranchBound.main(reducedGrid);
-             // double scoreGA = TSP_GA.TSP_GA(reducedGrid, iterationsBoundGA, bbRes.timeBB);
+                if(bbRes.iterationsBB < 10000000) {
+                    System.out.println("BB: " + bbRes.optScore + " " + bbRes.timeBB);
+                    double scoreGA = TSP_GA.TSP_GA(reducedGrid, iterationsBoundGA, bbRes.timeBB);
+                    double scoreSA = SA.SA(reducedGrid, iterationsBoundGA, bbRes.timeBB);
+                    System.out.println("GA: " + scoreGA);
+                    System.out.println("SA: " + scoreSA);
 
-                double scoreSA = SA.SA(reducedGrid, iterationsBoundGA, bbRes.timeBB);
-                a.add(new CPU_SCORE(reducedGrid, preservance,   bbRes.iterationsBB, bbRes.timeBB, bbRes.optScore, scoreSA, iterationsBoundGA));
+                    a.add(new CPU_SCORE(reducedGrid, preservance, bbRes.iterationsBB, bbRes.timeBB, bbRes.optScore, scoreGA, scoreSA, iterationsBoundGA));
+                } else if(bbRes.iterationsBB >= 10000000){
+                    c++;
+                    System.out.println("INFEASABLE SOLUTION no "+c+"\niter = " +bbRes.iterationsBB + "\ntime = " + bbRes.timeBB + "\non Shake level "+ preservance);
+
+                }
             }
             reductionResult.add(a);
         }
@@ -100,24 +109,29 @@ public class Main {
 
     private static ArrayList<ArrayList<CPU_SCORE>> shakeOperator(ArrayList<Integer> shaked) {
         ArrayList<ArrayList<CPU_SCORE>> shakeResult = new ArrayList<>();
-
-        for (int shake : shaked) {
+         for (int shake : shaked) {
             System.out.println("Shake level: " + shake);
             ArrayList<CPU_SCORE> a = new ArrayList<>();
+            int c = 0;
             for (int no = 0; no < repeatingExperiments; no++) {
 
                 ArrayList<City> shakeGrid = makeCityList.shake(emptyGrid, XY_DISTANCE, shake);
 
-                System.out.println("A");
+
                 BBresult bbRes = BranchBound.main(shakeGrid);
+                if(bbRes.iterationsBB < 10000000) {
+                    System.out.println("BB: " + bbRes.optScore + " " + bbRes.timeBB);
+                    double scoreGA = TSP_GA.TSP_GA(shakeGrid, iterationsBoundGA, bbRes.timeBB);
+                    double scoreSA = SA.SA(shakeGrid, iterationsBoundGA, bbRes.timeBB);
+                    System.out.println("GA: " + scoreGA);
+                    System.out.println("SA: " + scoreSA);
 
-                System.out.println("BB: " + bbRes.optScore + " " + bbRes.timeBB);
-                double scoreGA = TSP_GA.TSP_GA(shakeGrid, iterationsBoundGA, bbRes.timeBB);
-                //double scoreSA = SA.SA(shakeGrid, iterationsBoundGA, bbRes.timeBB);
+                    a.add(new CPU_SCORE(shakeGrid, shake, bbRes.iterationsBB, bbRes.timeBB, bbRes.optScore, scoreGA, scoreSA, iterationsBoundGA));
+                } else if(bbRes.iterationsBB >= 10000000){
+                    c++;
+                    System.out.println("INFEASABLE SOLUTION no "+c+"\niter = " +bbRes.iterationsBB + "\ntime = " + bbRes.timeBB + "\non Shake level "+ shake);
 
-                System.out.println("SA: " + scoreGA);
-
-                a.add(new CPU_SCORE(shakeGrid,  shake, bbRes.iterationsBB, bbRes.timeBB, bbRes.optScore, scoreGA, iterationsBoundGA));
+                }
             }
             shakeResult.add(a);
         }
@@ -172,7 +186,7 @@ public class Main {
                         writer.write(res.grid.get(h).x+ "," + res.grid.get(h).y + "-");
                     }
                     writer.write(res.grid.get(res.grid.size()-1).x+ "," + res.grid.get(res.grid.size()-1).y);
-                    writer.write( ";"+ res.pertrubation + ";"+res.iterationsBB + ";"+  res.timeBB + ";"+  res.optScoreBB+ ";"+  res.scoreGA+ ";"+  res.maxIterGA + "\n");
+                    writer.write( ";"+ res.pertrubation + ";"+res.iterationsBB + ";"+  res.timeBB + ";"+  res.optScoreBB+ ";"+  res.scoreGA+ ";"+  res.scoreSA+ ";"+res.maxIterGA + "\n");
                 }
             }
 

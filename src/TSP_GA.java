@@ -30,11 +30,15 @@ public class TSP_GA {
 
 
             pop = GA.evolvePopulation(pop);
-            for (int i = 0; i < iterations; i++) {
-                pop = GA.evolvePopulation(pop);
-            }
-            endTime = System.currentTimeMillis();
 
+            long start = System.currentTimeMillis();
+        int passed = 0;
+        long end = 0;
+        while(passed < iterations){
+                pop = GA.evolvePopulation(pop);
+                 end = System.currentTimeMillis();
+                    passed ++;
+            }
         //if((endTime - startTime) >= timeBound) return new CPU_SCORE(1000, currentBest);
         // Print final results
 //     makeCityList.printGrid(new JFrame("GA"), pop.getFittest().getTour());

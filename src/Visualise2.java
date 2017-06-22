@@ -54,8 +54,8 @@ public class Visualise2 extends JPanel{
 
 
 
-                // format:  ArrayList<City> grid, int pertrubation, int iterationsBB, long timeBB, double optScore, double scoreGA, int maxIterGA
-                resultArray.add(new CPU_SCORE(grid, Integer.valueOf(rawString[1]), Integer.valueOf(rawString[2]),Long.valueOf(rawString[3]),Double.valueOf(rawString[4]), Double.valueOf(rawString[5]), Integer.valueOf(rawString[6])));
+                // format:  ArrayList<City> grid, int pertrubation, int iterationsBB, long timeBB, double optScore, double scoreGA,double scoreSA, int maxIterGA
+                resultArray.add(new CPU_SCORE(grid, Integer.valueOf(rawString[1]), Integer.valueOf(rawString[2]),Long.valueOf(rawString[3]),Double.valueOf(rawString[4]), Double.valueOf(rawString[5]),-1.0, Integer.valueOf(rawString[7])));
             }
 
             fr.close();
@@ -80,7 +80,16 @@ public class Visualise2 extends JPanel{
             for (CPU_SCORE result : resultArray) {
                 if (result.pertrubation == i) {
                     // percentage above the optimum
-                    calculateValues.add(((result.scoreGA / result.optScoreBB) * 100) - 100);
+                    if((((result.scoreGA/result.optScoreBB) * 100) - 100 )< 0){
+                        calculateValues.add(0.1);
+
+                    } else {
+
+                        calculateValues.add(((result.scoreGA/result.optScoreBB) * 100) - 100);
+                    }
+
+
+                   // calculateValues.add((double)result.iterationsBB/100);
                 }
             }
 
@@ -105,6 +114,9 @@ public class Visualise2 extends JPanel{
             sum += num;
         }
         double mean = sum / givenNumbers.size();
+
+
+
 
         // calculate standard deviation
         double squaredDifferenceSum = 0.0;
@@ -164,25 +176,26 @@ if(!pertrubation.contains(data.pertrubation)) pertrubation.add(data.pertrubation
         g2.setColor(Color.BLACK);
 
         // create hatch marks and grid lines for y axis.
-        for (int i = 0; i < getMaxY() +1; i++) {
+        for (int i = 0; i < getMaxY(); i++) {
             int x0 = padding + labelPadding;
             int x1 = pointWidth + padding + labelPadding;
             int y0 = getHeight() - ((i * (getHeight() - padding * 2 - labelPadding)) / (int) getMaxY() + padding + labelPadding);
             int y1 = y0;
-            if (resultArray.size() > 0) {
+            if (resultArray.size() > 0 &&  (i % 2)  == 0) {
                 g2.setColor(gridColor);
                 g2.drawLine(padding + labelPadding + pointWidth, y0, getWidth() - padding, y1);
                 g2.setColor(Color.BLACK);
 
-                if ((i % 4)  == 0) {
+                if ((i % 10)  == 0) {
                     String yLabel = "" + i;
 
                     FontMetrics metrics = g2.getFontMetrics();
                     int labelWidth = metrics.stringWidth(yLabel);
                     g2.drawString(yLabel, x0 - labelWidth - 5, y0 + (metrics.getHeight() / 2) - 3);
                 }
+                g2.drawLine(x0, y0, x1, y1);
             }
-            g2.drawLine(x0, y0, x1, y1);
+
         }
 
         // and for x axis
@@ -192,9 +205,12 @@ if(!pertrubation.contains(data.pertrubation)) pertrubation.add(data.pertrubation
                 int x1 = x0;
                 int y0 = getHeight() - padding - labelPadding;
                 int y1 = y0 - pointWidth;
+//                if(i==99) {
+//                    g2.drawString("100", x0 - g2.getFontMetrics().stringWidth("100")+10 , y0 + g2.getFontMetrics().getHeight() + 3);
+//                }
                 if (i % 10 == 0 ) {
 
-                    g2.setColor(gridColor);
+                     g2.setColor(gridColor);
                     g2.drawLine(x0, getHeight() - padding - labelPadding - 1 - pointWidth, x1, padding);
                     g2.setColor(Color.black);
                     String xLabel = i + "";
@@ -220,7 +236,7 @@ if(!pertrubation.contains(data.pertrubation)) pertrubation.add(data.pertrubation
 
         if(drawScatter) {
             //yellow bb
-            g2.setColor(point2Color);
+            g2.setColor(point3Color);
             for (int i = 0; i < scatterPoints.size(); i++) {
                 int x = scatterPoints.get(i).x - pointWidth / 2;
                 int y = scatterPoints.get(i).y - pointWidth / 2;
@@ -282,8 +298,9 @@ if(!pertrubation.contains(data.pertrubation)) pertrubation.add(data.pertrubation
         int maxScore = 10;
         for (Stat s : stat) {
             if ((int) s.pertrubation > maxScore) maxScore = (int) s.pertrubation;
-        }
-        return maxScore;
+        }System.out.println(maxScore);
+
+        return maxScore+1;
     }
 
     private double getMaxY() {
@@ -292,7 +309,7 @@ if(!pertrubation.contains(data.pertrubation)) pertrubation.add(data.pertrubation
             for (double d : s.yCoord)
             if ( d > maxScore ) maxScore =  (int) d;
         }
-        return maxScore;
+        return maxScore+3;
     }
 
     public static void createAndShowGui2(JFrame frame) {

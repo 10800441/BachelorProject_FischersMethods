@@ -29,7 +29,7 @@ public class TSP implements Serializable
             }
     }
     public void generateSolution (boolean ongoing) {
-        long startTimeMs=System.currentTimeMillis();
+        long startTimeMs = System.currentTimeMillis();
         if (!ongoing) {
             // Create root node
             byte[] cities = new byte[2];
@@ -42,7 +42,7 @@ public class TSP implements Serializable
             queue.add(root);
         }
 int count = 0;
-        while (queue.size() > 0) {
+        while (queue.size() > 0 && (count < 100000000)) {
             count++;
             Node next = (Node) queue.first();
             //System.out.println("next.size="+next.size());
@@ -99,51 +99,53 @@ int count = 0;
                                             int[TSP.numRows];
                                     for (Iterator iter =queue.iterator();
 
-                                    iter.hasNext(); ) {
-                                        Node n = (Node) iter.next();
-                                        number[n.level()]++;
-                                    }
-                                    if (verbose==1) {
-                                        System.out.println();
-                                        for (int i = 2; i < TSP.numRows;
-                                             i++) {
-                                            System.out.print(i + ": " +
-                                                    number[i] + " ");
-                                            if (i % 5 == 0) {
-                                                System.out.println();
-                                            }
+                                             iter.hasNext(); ) {
+                                            Node n = (Node) iter.next();
+                                            number[n.level()]++;
                                         }
-                                        System.out.println("\n");
+                                        if (verbose == 1) {
+                                            System.out.println();
+                                            for (int i = 2; i < TSP.numRows;
+                                                 i++) {
+                                                System.out.print(i + ": " +
+                                                        number[i] + " ");
+                                                if (i % 5 == 0) {
+                                                    System.out.println();
+                                                }
+                                            }
+                                            System.out.println("\n");
+                                        }
                                     }
                                 }
                             }
-                        }
-                        newNode.computeLowerBound();
-                        double lowerBound = newNode.lowerBound();
-                        if (lowerBound < bestTour) {
-                            queue.add(newNode);
-                        } else {
-                            newNode = null;
+                            newNode.computeLowerBound();
+                            double lowerBound = newNode.lowerBound();
+                            if (lowerBound < bestTour) {
+                                queue.add(newNode);
+                            } else {
+                                newNode = null;
+                            }
                         }
                     }
+                } else {
+                    next = null;
                 }
-            } else {
-                next = null;
+            }
+        if(count >= 100000000) iterations = count;
+            if (verbose == 1) System.out.println("\n\nAn optimum tour has been found.");
+            long endTimeMs = System.currentTimeMillis();
+            long durationMs = endTimeMs - startTimeMs;
+            //output best tour
+            //System.out.print(bestNode);
+            if (verbose == 1) {
+                System.out.println("Best tour: " + bestNode);
+                System.out.println("Cost of tour: " + bestTour);
+                System.out.println("Total of nodes generated: " + totalNodeCount);
+                System.out.println("Duration=" + durationMs / 1000 + "s");
+                System.out.println();
             }
         }
-        if (verbose==1) System.out.println("\n\nAn optimum tour has been found.");
-        long endTimeMs=System.currentTimeMillis();
-        long durationMs=endTimeMs-startTimeMs;
-        //output best tour
-        //System.out.print(bestNode);
-        if (verbose==1) {
-            System.out.println("Best tour: "+bestNode);
-            System.out.println("Cost of tour: "+bestTour);
-            System.out.println("Total of nodes generated: "+totalNodeCount);
-                    System.out.println("Duration="+durationMs/1000+"s");
-            System.out.println();
-        }
-    }
+
     // Queries
     public long nodesCreated () {
         return totalNodeCount;

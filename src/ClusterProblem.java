@@ -19,7 +19,7 @@ public class ClusterProblem {
        ArrayList<CPU_SCORE> resultArray = new ArrayList<>();
 
         try {
-            FileReader fr = new FileReader("out/data/Systematic/ReductionCities30_Ex100bo100reduceSA30C.txt");
+            FileReader fr = new FileReader("out/data/FinalResults/ShakeGASAshake.txt");
             BufferedReader br = new BufferedReader(fr);
             String s;
             while ((s = br.readLine()) != null) {
@@ -38,7 +38,7 @@ public class ClusterProblem {
 
 
                 // format:  ArrayList<City> grid, int pertrubation, int iterationsBB, long timeBB, double optScore, double scoreGA, int maxIterGA
-                resultArray.add(new CPU_SCORE(grid, Integer.valueOf(rawString[1]), Integer.valueOf(rawString[2]),Long.valueOf(rawString[3]),Double.valueOf(rawString[4]), Double.valueOf(rawString[5]), Integer.valueOf(rawString[6])));
+                resultArray.add(new CPU_SCORE(grid, Integer.valueOf(rawString[1]), Integer.valueOf(rawString[2]),Long.valueOf(rawString[3]),Double.valueOf(rawString[4]), Double.valueOf(rawString[5]),Double.valueOf(rawString[6]), Integer.valueOf(rawString[7])));
             }
 
             fr.close();
@@ -52,16 +52,16 @@ public class ClusterProblem {
 
 
 for(CPU_SCORE A : resultArray){
-    double p = ((A.scoreGA / A.optScoreBB) * 100) - 100;
-    if (p > 136 && p < 145){
-        System.out.println("Cat Hard: "+ A.grid +"\nscoreSA: " +A.scoreGA + "\nopti: "+ A.optScoreBB + "\n");
-        DrawGraph.createAndShowGui(new JFrame("hard"+ p), A.grid, new DrawGraph() );
-    }
-
-    if (p > 40 && p < 45){
-        System.out.println("Cat Easy: "+ A.grid +"\nscoreSA: " +A.scoreGA + "\nopti: "+ A.optScoreBB+ "\n");
-        DrawGraph.createAndShowGui(new JFrame("easy"+ p), A.grid, new DrawGraph());
-    }
+   if(A.optScoreBB > A.scoreGA){
+       System.out.println("GA anomaly on " + A.pertrubation);
+       System.out.println("scores: BB" +A.optScoreBB+ " SA " + A.scoreSA + " GA " + A.scoreGA);
+       System.out.println("BBit "+ A.iterationsBB + "\n");
+   }
+   if(A.optScoreBB > A.scoreSA){
+       System.out.println("SA anomaly on " + A.pertrubation);
+       System.out.println("scores: BB" +A.optScoreBB+ " SA " + A.scoreSA + " GA " + A.scoreGA);
+       System.out.println("BBit "+ A.iterationsBB + "\n");
+   }
 }
 
       //  Visualise2.main("out/data/Systematic/ReductionCities12_Ex100bo100reduceSA.txt",true,  true);

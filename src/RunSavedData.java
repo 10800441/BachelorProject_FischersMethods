@@ -41,7 +41,7 @@ public class RunSavedData extends JPanel{
         drawScatterT = false;
         drawBoundTime = false;
         drawBoundIter = true;
-        String fileName = "out/data/Systematic/ReductionCities30_Ex100bo100reduceSA30C.txt";
+        String fileName = "out/data/FinalResults/ReductionGASAreduce.txt";
         System.out.println("Visualising " + fileName);
         try {
             FileReader fr = new FileReader(fileName);
@@ -63,7 +63,7 @@ public class RunSavedData extends JPanel{
 
 
                 // format:  ArrayList<City> grid, int pertrubation, int iterationsBB, long timeBB, double optScore, double scoreGA, int maxIterGA
-                resultArray.add(new CPU_SCORE(grid, Integer.valueOf(rawString[1]), Integer.valueOf(rawString[2]),Long.valueOf(rawString[3]),Double.valueOf(rawString[4]), Double.valueOf(rawString[5]), Integer.valueOf(rawString[6])));
+                resultArray.add(new CPU_SCORE(grid, Integer.valueOf(rawString[1]), Integer.valueOf(rawString[2]),Long.valueOf(rawString[3]),Double.valueOf(rawString[4]), Double.valueOf(rawString[5]),Double.valueOf(rawString[6]), Integer.valueOf(rawString[7])));
             }
 
             fr.close();
@@ -73,7 +73,7 @@ public class RunSavedData extends JPanel{
 
         System.out.println("Loading data completed, drawing graph BB");
 
-        visualiseData();
+        Visualise2.main("out/data/FinalResults/ShakeCities20_Ex100bo100GASAshake.txt", true,true);
     }
 
     private static void visualiseData(){
@@ -90,8 +90,8 @@ public class RunSavedData extends JPanel{
                 if (result.pertrubation == i) {
                     // percentage above the optimum
 
-                    if(result.iterationsBB/1000000< 200)  {
-                        calculateValuesIter.add((double)result.timeBB/10000);
+                    if(result.iterationsBB/1000000> 200)  {
+                        makeCityList.printGrid(new JFrame(), result.grid);
                     }
                 }
             }

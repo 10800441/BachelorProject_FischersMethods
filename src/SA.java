@@ -22,12 +22,12 @@ public class SA {
         }
 
         double currentBest = 100000000;
-        long endTime = System.currentTimeMillis();
+        long endTime = 0;
         long startTime = System.currentTimeMillis();
         // as long as the optimum score isnt reached or a time bound
         int k = 0;
         while(k < bound) {
-            k++;
+
 
             // Set initial temp
             double temp = 10000;
@@ -79,7 +79,8 @@ public class SA {
             }
             currentBest = (double) best.getDistance();
 
-
+            endTime = System.currentTimeMillis();
+            k ++;
         }
 //        JFrame frame = new JFrame("SA");
 //        makeCityList.printGrid( frame, best.getTour());

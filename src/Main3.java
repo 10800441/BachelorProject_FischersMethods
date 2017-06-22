@@ -1,47 +1,49 @@
-//import javax.swing.*;
-//import java.io.File;
-//import java.io.FileWriter;
-//import java.io.IOException;
-//import java.util.ArrayList;
-//import java.util.Collections;
-//import java.util.Comparator;
-//
-//
-//public class Main3 {
-//
-//    final static String operator = "Reduce";
-//    final static String fileId = "";
-//    final static int TOTALCITIES = 20;
-//    final static int XY_DISTANCE = 12;
-//    final static ArrayList<City> emptyGrid = makeCityList.makePerfectCityList(TOTALCITIES, XY_DISTANCE);
-//
-//    public static void main(String[] args) {
-//
-//        final int timeBound  = 600;
-//
-//        ArrayList<Integer> preservation = new ArrayList<>();
-//        preservation.add(99);
-//        preservation.add(98);
-//        preservation.add(95);
-//        preservation.add(90);
-//        preservation.add(85);
-//        preservation.add(75);
-//        preservation.add(50);
-//        preservation.add(25);
-//
-//        ArrayList<Integer> shaked = new ArrayList<>();
-//        shaked.add(5);
-//        shaked.add(10);
-//        shaked.add(25);
-//        shaked.add(50);
-//        shaked.add(75);
-//        shaked.add(100);
-//        shaked.add(150);
-//        shaked.add(200);
-//        // Reduction
-//        ArrayList<City> emtyGrid = makeCityList.makePerfectCityList(TOTALCITIES, XY_DISTANCE);
-//
-//        ArrayList<ArrayList<Result>> matrixArray = new ArrayList<>();
+import javax.swing.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+
+public class Main3 {
+
+    final static String operator = "Reduce";
+    final static String fileId = "";
+    final static int TOTALCITIES = 20;
+    final static int XY_DISTANCE = 6;
+    final static ArrayList<City> emptyGrid = makeCityList.makePerfectCityList(TOTALCITIES, XY_DISTANCE);
+
+    public static void main(String[] args) {
+
+        final int timeBound = 600;
+
+        ArrayList<Integer> preservation = new ArrayList<>();
+        preservation.add(99);
+        preservation.add(98);
+        preservation.add(95);
+        preservation.add(90);
+        preservation.add(85);
+        preservation.add(75);
+        preservation.add(50);
+        preservation.add(25);
+
+        ArrayList<Integer> shaked = new ArrayList<>();
+        shaked.add(5);
+        shaked.add(10);
+        shaked.add(25);
+        shaked.add(50);
+        shaked.add(75);
+        shaked.add(100);
+        shaked.add(150);
+        shaked.add(200);
+        // Reduction
+        ArrayList<City> emtyGrid = makeCityList.makePerfectCityList(TOTALCITIES, XY_DISTANCE);
+  emtyGrid = makeCityList.shake(emptyGrid, 6, 150);
+makeCityList.printGrid(new JFrame("b"), emtyGrid);
+    }
+}//        ArrayList<ArrayList<Result>> matrixArray = new ArrayList<>();
 //        // Reduction
 ////        for (int shake : shaked) {
 ////            System.out.println("Shake: " + shake);

@@ -26,7 +26,7 @@ public class DrawGraph extends JPanel {
     private Color pointColor = new Color(100, 100, 100, 180);
     private Color gridColor = new Color(200, 200, 200, 200);
     private static final Stroke GRAPH_STROKE = new BasicStroke(2f);
-    private int pointWidth = 8;
+    private int pointWidth = 12;
     private static ArrayList<City> tour;
 
 
@@ -41,8 +41,8 @@ public class DrawGraph extends JPanel {
 
         List<Point> graphPoints = new ArrayList<>();
         for (City city: tour){
-            int x1 = (int) (city.x * xScale + padding + labelPadding);
-            int y1 = (int) (city.y * yScale + padding);
+            int x1 = (int) ((2+city.x)* xScale + padding + labelPadding);
+            int y1 = (int) ((2+city.y) * yScale + padding);
             graphPoints.add(new Point(x1, y1));
         }
 
@@ -62,33 +62,31 @@ public class DrawGraph extends JPanel {
             int y1 = y0;
             if (tour.size() > 0) {
                 g2.setColor(gridColor);
-                g2.drawLine(padding + labelPadding + pointWidth, y0, getWidth() - padding, y1);
+                g2.drawLine(padding + labelPadding  , y0, getWidth() - padding, y1);
                 g2.setColor(Color.BLACK);
                 String yLabel = "" + i;
                 FontMetrics metrics = g2.getFontMetrics();
                 int labelWidth = metrics.stringWidth(yLabel);
-                g2.drawString(yLabel, x0 - labelWidth - 5, y0 + (metrics.getHeight() / 2) - 3);
+
             }
-            g2.drawLine(x0, y0, x1, y1);
         }
 
         // and for x axis
         for (int i = 0; i < getMaxX(); i++) {
             if (tour.size() > 1) {
-                int x0 = padding + labelPadding + (i * (getWidth() - padding * 2 - labelPadding)/getMaxX());
+                int x0 = padding + labelPadding + (i * (getWidth() - padding * 2 - labelPadding) / getMaxX());
                 int x1 = x0;
                 int y0 = getHeight() - padding - labelPadding;
                 int y1 = y0 - pointWidth;
                 if ((i % ((int) ((tour.size() / 20.0)) + 1)) == 0) {
                     g2.setColor(gridColor);
-                    g2.drawLine(x0, getHeight() - padding - labelPadding - 1 - pointWidth, x1, padding);
+                    g2.drawLine(x0, getHeight() - padding - labelPadding - 1, x1, padding);
                     g2.setColor(Color.black);
                     String xLabel = i + "";
                     FontMetrics metrics = g2.getFontMetrics();
                     int labelWidth = metrics.stringWidth(xLabel);
-                    g2.drawString(xLabel, x0 - labelWidth / 2, y0 + metrics.getHeight() + 3);
+
                 }
-                g2.drawLine(x0, y0, x1, y1);
             }
         }
 
@@ -100,22 +98,8 @@ public class DrawGraph extends JPanel {
         g2.setColor(lineColor);
         g2.setStroke(GRAPH_STROKE);
         // Closing the tour
-        int startx = (int) graphPoints.get(graphPoints.size()-1).x;
-        int starty = (int) graphPoints.get(graphPoints.size()-1).y;
-        int endx = (int) graphPoints.get(0).x;
-        int endy = (int) graphPoints.get(0).y;
-         g2.drawLine(startx, starty, endx, endy);
 
-        if(tour != null){
-            for (int i = 0; i < graphPoints.size()-1; i++) {
 
-                int x1 = graphPoints.get(i).x;
-                int y1 = graphPoints.get(i).y;
-                int x2 = graphPoints.get(i+1).x;
-                int y2 = graphPoints.get(i+1).y;
-                g2.drawLine(x1, y1, x2, y2);
-            }
-        }
 
         g2.setStroke(oldStroke);
         g2.setColor(pointColor);
@@ -133,7 +117,7 @@ public class DrawGraph extends JPanel {
         for (City city: tour) {
             if(city.x > maxScore) maxScore = city.x;
         }
-        return maxScore+1;
+        return maxScore+4;
     }
 
     private double getMaxY() {
@@ -141,7 +125,7 @@ public class DrawGraph extends JPanel {
         for (City city: tour) {
             if(city.y > maxScore) maxScore = city.y;
         }
-        return maxScore+1;
+        return maxScore+4;
     }
 
     public static void createAndShowGui(JFrame frame, ArrayList<City> solGrid, DrawGraph m) {
